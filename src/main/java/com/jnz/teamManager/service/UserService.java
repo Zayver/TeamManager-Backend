@@ -28,8 +28,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public void addUser(User user) {
+        userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
