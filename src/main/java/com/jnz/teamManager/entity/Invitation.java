@@ -9,10 +9,10 @@ import lombok.Data;
 @Table(name = "invitation")
 public class Invitation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     User user;
 
@@ -20,7 +20,7 @@ public class Invitation {
     @JoinColumn(name = "userOwner_id", nullable = false, referencedColumnName = "id")
     User userOwner;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     Team teamId;
 

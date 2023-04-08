@@ -25,6 +25,8 @@ public class User {
     String email;
     @Column(unique = true)
     String username;
+
+    @JsonIgnore
     String password;
 
     @ManyToMany
@@ -36,12 +38,15 @@ public class User {
     Set<Team> userTeams;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     Set<Invitation> invitations;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userOwner")
+    @JsonIgnore
     Set<Invitation> invitationsCreated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     Set<Request> requestsCreated;
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageTranscoder;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -22,6 +23,10 @@ public class UserService {
 
     public User getUserById(Long id){
         return userRepository.findById(id).orElseThrow();
+    }
+
+    public User getByUsername(String username){
+        return userRepository.findAll().stream().filter(user -> user.getUsername().equals(username)).findFirst().get();
     }
 
     public Iterable<User> findAll(){
@@ -47,5 +52,12 @@ public class UserService {
     public Iterable<Team> getTeamsByUserId(Long id) {
         val user = getUserById(id);
         return user.getUserTeams();
+    }
+
+    public Iterable<User> getAllUsersExceptCaller(Long id) {
+        var users = userRepository.findAll();
+        val userToRemove = getUserById(id);
+        users.remove(userToRemove);
+        return users;
     }
 }

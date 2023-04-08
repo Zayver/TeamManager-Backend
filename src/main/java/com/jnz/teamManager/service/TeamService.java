@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -48,4 +47,10 @@ public class TeamService {
         teamRepository.save(tTeam);
     }
 
+    public Iterable<Team> getTeamsWhereUserIsNotAt(Long id) {
+        return this.teamRepository.findAll().stream()
+                .filter(team -> team.getPlayers().stream()
+                .noneMatch(user -> user.getId().equals(id)))
+                .collect(Collectors.toSet());
+    }
 }
