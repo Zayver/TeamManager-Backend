@@ -18,6 +18,11 @@ public class TeamController {
         return teamService.findAll();
     }
 
+    @GetMapping("/all/{id}")
+    public Iterable<Team> findAll(@PathVariable("id") Long id){
+        return teamService.getTeamsWhereUserIsNotAt(id);
+    }
+
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public void addTeam(@RequestBody Team team){
@@ -38,8 +43,5 @@ public class TeamController {
     public Iterable<User> getUsersByTeamId(@PathVariable("id") Long id){
         return teamService.getUsersByTeamId(id);
     }
-
-
-
 
 }

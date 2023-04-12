@@ -28,6 +28,11 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/all/{id}")
+    public Iterable<User> getAllUsersExceptCaller(@PathVariable("id") Long id){
+        return userService.getAllUsersExceptCaller(id);
+    }
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable("id") Long id){
         return userService.getUserById(id);

@@ -5,6 +5,8 @@ import com.jnz.teamManager.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/request")
 public class RequestController {
@@ -12,16 +14,21 @@ public class RequestController {
     RequestService requestService;
 
     @PostMapping("/add")
-    public Request addRequest(@RequestBody Request request){
-        return requestService.addRequest(request);
+    public void addRequest(@RequestBody Map<String, String> request){
+        requestService.addRequest(request);
+    }
+
+    @GetMapping("/get/{id}")
+    public Iterable<Request> getRequestByTeamId(@PathVariable("id") Long id){
+        return requestService.getRequestByTeamId(id);
     }
 
     @PostMapping("/accept")
     public void acceptRequest(@RequestBody Request request){
-        //TODO
+        requestService.acceptRequest(request);
     }
 
-    @DeleteMapping("/decline")
+    @PostMapping("/decline")
     public void declineRequest(@RequestBody Request request){
         requestService.deleteRequest(request);
     }

@@ -5,7 +5,6 @@ import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.repository.UserRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageTranscoder;

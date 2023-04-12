@@ -2,26 +2,49 @@ package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.entity.Invitation;
 import com.jnz.teamManager.repository.InvitationsRepository;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class InvitationsService {
     @Autowired
     InvitationsRepository invitationsRepository;
 
-    public Invitation addInvitation(Invitation invitation){
-        return invitationsRepository.save(invitation);
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    TeamService teamService;
+
+    public void addInvitation(Map<String, String> invitation){
+        val user = userService.getUserById(Long.parseLong(invitation.get("userReceiverId")));
+        val userOwner = userService.getUserById(Long.parseLong(invitation.get("userOwnerId")));
+        val team = teamService.getTeamById(Long.parseLong(invitation.get("teamId")));
+        val message = invitation.get("message");
+        var invitationT = new Invitation();
+        invitationT.setMessage(message);
+        invitationT.setUser(user);
+        invitationT.setUserOwner(userOwner);
+        invitationT.setTeamId(team);
+        this.invitationsRepository.save(invitationT);
+    }
+
+    public void acceptInvitation(Invitation invitation){
+        userService.addTeamToUser(invitation.getUser().getId(), invitation.getTeamId().getId());
+        deleteInvitation(invitation);
     }
 
     public void deleteInvitation(Invitation invitation){
         invitationsRepository.delete(invitation);
     }
 
-    public List<Invitation> getInvitationsById(Long id){
-        return invitationsRepository.getInvitationsById(id);
+    public Iterable<Invitation> getInvitationsById(Long id){
+        return invitationsRepository.findAll().stream()
+                .filter(invitation -> invitation.getUser().getId().equals(id)).collect(Collectors.toSet());
     }
 
 
