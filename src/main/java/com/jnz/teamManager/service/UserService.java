@@ -5,6 +5,7 @@ import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.repository.UserRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageTranscoder;
@@ -47,5 +48,11 @@ public class UserService {
     public Iterable<Team> getTeamsByUserId(Long id) {
         val user = getUserById(id);
         return user.getUserTeams();
+    }
+
+    public User getUserByUsername(String username) {
+        return this.userRepository.findAll()
+                .stream().filter(user -> user.getUsername().equals(username))
+                .findFirst().orElseThrow();
     }
 }
