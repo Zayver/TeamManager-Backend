@@ -5,6 +5,7 @@ import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.repository.TeamRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class TeamService {
     @Autowired
-    TeamRepository teamRepository;
+    private TeamRepository teamRepository;
+
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(@Lazy UserService userService){
+        this.userService = userService;
+    }
 
     public Team getTeamById(Long id){
         return teamRepository.findById(id).orElseThrow();
@@ -23,8 +31,9 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public void addTeam(Team team){
-        teamRepository.save(team);
+    public void addTeam(Team team, Long userId){
+        val t = teamRepository.save(team);
+        userService.addTeamToUser(userId, t.getId());
     }
 
     @Transactional

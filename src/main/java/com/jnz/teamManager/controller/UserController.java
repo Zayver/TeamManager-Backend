@@ -61,4 +61,6 @@ public class UserController {
         val teamId = Long.parseLong(json.get("teamId"));
         userService.addTeamToUser(id, teamId);
     }
+
+
 }

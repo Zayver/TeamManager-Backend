@@ -54,4 +54,11 @@ public class UserService {
                 .stream().filter(user -> user.getUsername().equals(username))
                 .findFirst().orElseThrow();
     }
+
+    public Iterable<User> getAllUsersExceptCaller(Long id) {
+        var users = userRepository.findAll();
+        val userToRemove = getUserById(id);
+        users.remove(userToRemove);
+        return users;
+    }
 }

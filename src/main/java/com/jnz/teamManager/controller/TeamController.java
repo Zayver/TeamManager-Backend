@@ -23,10 +23,10 @@ public class TeamController {
         return teamService.getTeamsWhereUserIsNotAt(id);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/add/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addTeam(@RequestBody Team team){
-        teamService.addTeam(team);
+    public void addTeam(@RequestBody Team team, @PathVariable("id") Long id){
+        teamService.addTeam(team, id);
     }
 
     @PutMapping("/update")
