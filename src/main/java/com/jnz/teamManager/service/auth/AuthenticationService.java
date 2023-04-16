@@ -51,7 +51,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userService.getUserByUsername(request.getUsername());
+        User user = userService.getUserByUsername(request.getUsername());
         var jwt = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwt)
