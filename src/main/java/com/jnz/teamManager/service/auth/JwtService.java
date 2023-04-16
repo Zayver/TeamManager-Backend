@@ -12,11 +12,14 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY = "28472B4B6250655368566D5971337436773979244226452948404D635166546A";
+    private final String SECRET_KEY = Optional.ofNullable(System.getenv("SECRET_KEY_JWT")).orElseThrow(
+            () -> new RuntimeException("JWT SECRET NOT PROVIDED AS ENV"));
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
