@@ -19,7 +19,9 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"userTeams"})
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope = User.class
+)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +39,7 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private Role role;
 
 
@@ -49,36 +52,47 @@ public class User implements UserDetails {
     Set<Team> userTeams;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+
     Set<Invitation> invitations;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userOwner")
+    @JsonIgnore
+
     Set<Invitation> invitationsCreated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+
     Set<Request> requestsCreated;
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

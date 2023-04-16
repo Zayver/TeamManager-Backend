@@ -1,12 +1,19 @@
 package com.jnz.teamManager.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "invitation")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope = Invitation.class
+)
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

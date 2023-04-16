@@ -16,7 +16,9 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"players"})
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope = Team.class
+)
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
