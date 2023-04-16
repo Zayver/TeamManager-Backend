@@ -1,6 +1,7 @@
 package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.entity.Invitation;
+import com.jnz.teamManager.exception.error.InvitationAlreadyExistsException;
 import com.jnz.teamManager.repository.InvitationsRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,15 @@ public class InvitationsService {
         val user = userService.getUserById(Long.parseLong(invitation.get("userReceiverId")));
         val userOwner = userService.getUserById(Long.parseLong(invitation.get("userOwnerId")));
         val team = teamService.getTeamById(Long.parseLong(invitation.get("teamId")));
+
+        if(this.invitationsRepository
+                .findAll()
+                .stream()
+                .anyMatch(invitation1 -> invitation1.getUser().getId().equals(user.getId()) &&
+                        invitation1.getTeamId().getId().equals(team.getId()))){
+            throw new InvitationAlreadyExistsException();
+        }
+
         val message = invitation.get("message");
         var invitationT = new Invitation();
         invitationT.setMessage(message);

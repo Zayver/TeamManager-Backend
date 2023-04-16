@@ -2,6 +2,9 @@ package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
+import com.jnz.teamManager.exception.error.EmailAlreadyExistsException;
+import com.jnz.teamManager.exception.error.UserNotExistsException;
+import com.jnz.teamManager.exception.error.UsernameAlreadyExistsException;
 import com.jnz.teamManager.repository.UserRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +24,21 @@ public class UserService {
 
 
     public User getUserById(Long id){
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(UserNotExistsException::new);
     }
 
     public Iterable<User> findAll(){
         return userRepository.findAll();
     }
 
-    public void addUser(User user) {
-        userRepository.save(user);
+    public User addUser(User user) {
+        if(this.userRepository.findAll().stream().anyMatch(user1 -> user1.getUsername().equals(user.getUsername()))){
+            throw new UsernameAlreadyExistsException();
+        }
+        if(this.userRepository.findAll().stream().anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))){
+            throw new EmailAlreadyExistsException();
+        }
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
@@ -52,7 +61,7 @@ public class UserService {
     public User getUserByUsername(String username) {
         return this.userRepository.findAll()
                 .stream().filter(user -> user.getUsername().equals(username))
-                .findFirst().orElseThrow();
+                .findFirst().orElseThrow(UserNotExistsException::new);
     }
 
     public Iterable<User> getAllUsersExceptCaller(Long id) {

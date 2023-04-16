@@ -1,6 +1,7 @@
 package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.entity.Request;
+import com.jnz.teamManager.exception.error.RequestAlreadyExistsException;
 import com.jnz.teamManager.repository.RequestRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,15 @@ public class RequestService {
     public void addRequest(Map<String, String> request){
         val user = userService.getUserById(Long.parseLong(request.get("id")));
         val team = teamService.getTeamById(Long.parseLong(request.get("teamId")));
+
+        if(this.requestRepository.findAll()
+                .stream().
+                anyMatch(request1 -> request1.getTeam()
+                        .getId()
+                        .equals(team.getId()) && request1.getUser().getId().equals(user.getId()))){
+            throw new RequestAlreadyExistsException();
+        }
+
         var r = new Request();
         r.setTeam(team);
         r.setUser(user);

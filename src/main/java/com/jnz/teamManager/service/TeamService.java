@@ -2,6 +2,7 @@ package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
+import com.jnz.teamManager.exception.error.TeamNotExistsException;
 import com.jnz.teamManager.repository.TeamRepository;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class TeamService {
     }
 
     public Team getTeamById(Long id){
-        return teamRepository.findById(id).orElseThrow();
+        return teamRepository.findById(id).orElseThrow(TeamNotExistsException::new);
     }
 
     public Iterable<Team> findAll(){

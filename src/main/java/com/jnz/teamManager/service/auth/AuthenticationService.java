@@ -35,9 +35,13 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        userService.addUser(user);
+        var nUser = userService.addUser(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().token(jwtToken)
+                .id(nUser.getId())
+                .email(nUser.getEmail())
+                .username(user.getUsername())
+                .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
