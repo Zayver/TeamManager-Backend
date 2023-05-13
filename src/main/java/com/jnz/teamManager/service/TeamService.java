@@ -2,7 +2,6 @@ package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.dto.TeamDTO;
 import com.jnz.teamManager.entity.Team;
-import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.exception.error.TeamNotExistsException;
 import com.jnz.teamManager.repository.TeamRepository;
 import lombok.val;

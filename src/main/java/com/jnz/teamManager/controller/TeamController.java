@@ -2,7 +2,6 @@ package com.jnz.teamManager.controller;
 
 import com.jnz.teamManager.dto.TeamDTO;
 import com.jnz.teamManager.entity.Team;
-import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

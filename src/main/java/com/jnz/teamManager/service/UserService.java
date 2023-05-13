@@ -2,7 +2,6 @@ package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.dto.TeamDTO;
 import com.jnz.teamManager.dto.UserDTO;
-import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.exception.error.EmailAlreadyExistsException;
 import com.jnz.teamManager.exception.error.UserNotExistsException;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageTranscoder;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
