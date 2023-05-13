@@ -1,9 +1,11 @@
 package com.jnz.teamManager.service;
 
+import com.jnz.teamManager.dto.InvitationDTO;
 import com.jnz.teamManager.entity.Invitation;
 import com.jnz.teamManager.exception.error.InvitationAlreadyExistsException;
 import com.jnz.teamManager.repository.InvitationsRepository;
 import lombok.val;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +15,16 @@ import java.util.stream.Collectors;
 @Service
 public class InvitationsService {
     @Autowired
-    InvitationsRepository invitationsRepository;
+    private InvitationsRepository invitationsRepository;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    TeamService teamService;
+    private TeamService teamService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public void addInvitation(Map<String, String> invitation){
         val user = userService.getUserById(Long.parseLong(invitation.get("userReceiverId")));
@@ -52,9 +57,11 @@ public class InvitationsService {
         invitationsRepository.delete(invitation);
     }
 
-    public Iterable<Invitation> getInvitationsById(Long id){
+    public Iterable<InvitationDTO> getInvitationsById(Long id){
         return invitationsRepository.findAll().stream()
-                .filter(invitation -> invitation.getUser().getId().equals(id)).collect(Collectors.toSet());
+                .filter(invitation -> invitation.getUser().getId().equals(id))
+                .map(invitation -> modelMapper.map(invitation, InvitationDTO.class))
+                .collect(Collectors.toSet());
     }
 
 

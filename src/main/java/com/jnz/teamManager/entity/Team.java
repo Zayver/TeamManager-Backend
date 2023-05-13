@@ -34,11 +34,9 @@ public class Team {
 
 
     @ManyToMany(mappedBy = "userTeams")
-    @JsonIgnore
     Set<User> players;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
     Set<Request> requests;
 
 

@@ -1,5 +1,6 @@
 package com.jnz.teamManager.controller;
 
+import com.jnz.teamManager.dto.TeamDTO;
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.service.TeamService;
@@ -13,13 +14,9 @@ public class TeamController {
     @Autowired
     TeamService teamService;
 
-    @GetMapping("/all")
-    public Iterable<Team> findAll(){
-        return teamService.findAll();
-    }
 
     @GetMapping("/all/{id}")
-    public Iterable<Team> findAll(@PathVariable("id") Long id){
+    public Iterable<TeamDTO> findAll(@PathVariable("id") Long id){
         return teamService.getTeamsWhereUserIsNotAt(id);
     }
 
@@ -37,11 +34,6 @@ public class TeamController {
     @DeleteMapping("/delete/{id}")
     public void deleteTeam(@PathVariable("id") Long id){
         teamService.deleteTeam(id);
-    }
-
-    @GetMapping("/users/{id}")
-    public Iterable<User> getUsersByTeamId(@PathVariable("id") Long id){
-        return teamService.getUsersByTeamId(id);
     }
 
 }

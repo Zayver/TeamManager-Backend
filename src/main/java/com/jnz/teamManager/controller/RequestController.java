@@ -1,5 +1,6 @@
 package com.jnz.teamManager.controller;
 
+import com.jnz.teamManager.dto.RequestDTO;
 import com.jnz.teamManager.entity.Request;
 import com.jnz.teamManager.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class RequestController {
     }
 
     @GetMapping("/get/{id}")
-    public Iterable<Request> getRequestByTeamId(@PathVariable("id") Long id){
+    public Iterable<RequestDTO> getRequestByTeamId(@PathVariable("id") Long id){
         return requestService.getRequestByTeamId(id);
     }
 

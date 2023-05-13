@@ -1,5 +1,6 @@
 package com.jnz.teamManager.controller;
 
+import com.jnz.teamManager.dto.InvitationDTO;
 import com.jnz.teamManager.entity.Invitation;
 import com.jnz.teamManager.service.InvitationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class InvitationController {
     @Autowired
     InvitationsService invitationsService;
     @GetMapping("/get/{id}")
-    public Iterable<Invitation> getInvitation(@PathVariable("id") Long id){
+    public Iterable<InvitationDTO> getInvitation(@PathVariable("id") Long id){
         return invitationsService.getInvitationsById(id);
     }
     @PostMapping("/add")

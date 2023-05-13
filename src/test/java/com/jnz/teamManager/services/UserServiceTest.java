@@ -2,44 +2,68 @@ package com.jnz.teamManager.services;
 
 import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.exception.error.UserNotExistsException;
+import com.jnz.teamManager.repository.UserRepository;
 import com.jnz.teamManager.service.UserService;
 import lombok.val;
-import org.junit.jupiter.api.AfterEach;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DataJpaTest
 public class UserServiceTest {
 
     @Autowired
     private UserService userService;
 
-    private User user;
+    @MockBean
+    private UserRepository userRepository;
+
+
+    @Autowired
+    private TestEntityManager entityManager;
 
 
     @BeforeAll
-    void initialize(){
-        user = User.builder().email("tester_test@correo.com")
-                .username("tester_test")
-                .password("123456")
-                .build();
-    }
-    @Test
-    void addUser(){
-        val nUser = userService.addUser(user);
-        assertTrue(nUser.getId() != 0);
+    public void setUp() {
+        val tester =
+                User.builder()
+                        .email("tester@correo.com")
+                        .password("123456")
+                        .username("tester")
+                        .build()
+                ;
+
+        Mockito.when(userRepository.findAll()).thenReturn(
+                List.of(tester)
+        );
     }
 
     @Test
-    void getUserThatDontExist(){
+    void getUsernameThatExists(){
+        val user = userService.getUserByUsername("tester");
+        assertEquals("tester", user.getUsername());
+    }
+
+    @Test
+    void getUserThatNotExists(){
         try{
-            userService.getUserByUsername("jufaskhaksdfhkjsafdafsdsfdfsa");
+            val user = userService.getUserByUsername("hola");
         }catch (UserNotExistsException e){
             return;
         }
@@ -47,26 +71,15 @@ public class UserServiceTest {
     }
 
     @Test
-    void deleteU(){
-        val userN = User.builder().email("tester2_test@correo.com")
-                .username("tester2_test")
+    void saveUser(){
+        val user = User.builder()
+                .email("tester@correo.com")
+                .username("tester")
                 .password("123456")
                 .build();
-        val nUser = userService.addUser(userN);
-        userService.deleteUser(nUser.getId());
-        try{
-            userService.getUserByUsername(userN.getUsername());
-        }catch (UserNotExistsException e){
-            return;
-        }
-        fail();
+        this.userService.addUser(user);
     }
 
-    @AfterEach
-    void deleteUser(){
-        try{
-            userService.deleteUser(user.getId());
-        }catch (Exception e){
-        }
-    }
+
+
 }

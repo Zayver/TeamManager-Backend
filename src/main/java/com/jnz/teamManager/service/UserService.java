@@ -1,5 +1,7 @@
 package com.jnz.teamManager.service;
 
+import com.jnz.teamManager.dto.TeamDTO;
+import com.jnz.teamManager.dto.UserDTO;
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.exception.error.EmailAlreadyExistsException;
@@ -7,11 +9,14 @@ import com.jnz.teamManager.exception.error.UserNotExistsException;
 import com.jnz.teamManager.exception.error.UsernameAlreadyExistsException;
 import com.jnz.teamManager.repository.UserRepository;
 import lombok.val;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageTranscoder;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -21,14 +26,17 @@ public class UserService {
     @Autowired
     private TeamService teamService;
 
+    private ModelMapper modelMapper;
 
-
-    public User getUserById(Long id){
-        return userRepository.findById(id).orElseThrow(UserNotExistsException::new);
+    @Autowired
+    private void setModelMapper(@Lazy ModelMapper modelMapper){
+        this.modelMapper = modelMapper;
     }
 
-    public Iterable<User> findAll(){
-        return userRepository.findAll();
+
+
+    protected User getUserById(Long id){
+        return userRepository.findById(id).orElseThrow(UserNotExistsException::new);
     }
 
     public User addUser(User user) {
@@ -53,9 +61,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Iterable<Team> getTeamsByUserId(Long id) {
+    public Iterable<TeamDTO> getTeamsByUserId(Long id) {
         val user = getUserById(id);
-        return user.getUserTeams();
+        return user.getUserTeams().stream().map(team -> modelMapper.map(team, TeamDTO.class)).collect(Collectors.toSet());
     }
 
     public User getUserByUsername(String username) {
@@ -64,10 +72,10 @@ public class UserService {
                 .findFirst().orElseThrow(UserNotExistsException::new);
     }
 
-    public Iterable<User> getAllUsersExceptCaller(Long id) {
+    public Iterable<UserDTO> getAllUsersExceptCaller(Long id) {
         var users = userRepository.findAll();
         val userToRemove = getUserById(id);
         users.remove(userToRemove);
-        return users;
+        return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toSet());
     }
 }

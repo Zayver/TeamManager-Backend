@@ -1,5 +1,7 @@
 package com.jnz.teamManager.controller;
 
+import com.jnz.teamManager.dto.TeamDTO;
+import com.jnz.teamManager.dto.UserDTO;
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.service.UserService;
@@ -22,22 +24,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/all")
-    //TODO REMOVE LATER IN PRODUCTION, ONLY FOR TESTING
-    public Iterable<User> getAllUsers(){
-        return userService.findAll();
-    }
 
     @GetMapping("/all/{id}")
-    public Iterable<User> getAllUsersExceptCaller(@PathVariable("id") Long id){
+    public Iterable<UserDTO> getAllUsersExceptCaller(@PathVariable("id") Long id){
         return userService.getAllUsersExceptCaller(id);
     }
-
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") Long id){
-        return userService.getUserById(id);
-    }
-
 
     @PostMapping("/add")
     public void addUser(@RequestBody User user){
@@ -50,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/teams/{id}")
-    public Iterable<Team> getTeamsByUserId(@PathVariable("id") Long id){
+    public Iterable<TeamDTO> getTeamsByUserId(@PathVariable("id") Long id){
         return userService.getTeamsByUserId(id);
     }
 

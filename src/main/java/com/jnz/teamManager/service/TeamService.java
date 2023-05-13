@@ -1,10 +1,12 @@
 package com.jnz.teamManager.service;
 
+import com.jnz.teamManager.dto.TeamDTO;
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.entity.User;
 import com.jnz.teamManager.exception.error.TeamNotExistsException;
 import com.jnz.teamManager.repository.TeamRepository;
 import lombok.val;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -18,18 +20,20 @@ public class TeamService {
     private TeamRepository teamRepository;
 
     private UserService userService;
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private void setModelMapper(@Lazy ModelMapper modelMapper){
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     public void setUserService(@Lazy UserService userService){
         this.userService = userService;
     }
 
-    public Team getTeamById(Long id){
+    protected Team getTeamById(Long id){
         return teamRepository.findById(id).orElseThrow(TeamNotExistsException::new);
-    }
-
-    public Iterable<Team> findAll(){
-        return teamRepository.findAll();
     }
 
     public void addTeam(Team team, Long userId){
@@ -46,10 +50,6 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
-    public Iterable<User> getUsersByTeamId(Long id) {
-        val team =  getTeamById(id);
-        return team.getPlayers();
-    }
 
     public void updateTeam(Team team){
         var tTeam = getTeamById(team.getId());
@@ -57,10 +57,11 @@ public class TeamService {
         teamRepository.save(tTeam);
     }
 
-    public Iterable<Team> getTeamsWhereUserIsNotAt(Long id) {
+    public Iterable<TeamDTO> getTeamsWhereUserIsNotAt(Long id) {
         return this.teamRepository.findAll().stream()
                 .filter(team -> team.getPlayers().stream()
                 .noneMatch(user -> user.getId().equals(id)))
+                .map(team -> modelMapper.map(team, TeamDTO.class))
                 .collect(Collectors.toSet());
     }
 }

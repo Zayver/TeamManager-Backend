@@ -1,9 +1,11 @@
 package com.jnz.teamManager.service;
 
+import com.jnz.teamManager.dto.RequestDTO;
 import com.jnz.teamManager.entity.Request;
 import com.jnz.teamManager.exception.error.RequestAlreadyExistsException;
 import com.jnz.teamManager.repository.RequestRepository;
 import lombok.val;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class RequestService {
 
     @Autowired
     TeamService teamService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     public void addRequest(Map<String, String> request){
@@ -45,8 +50,10 @@ public class RequestService {
         requestRepository.delete(request);
     }
 
-    public Iterable<Request> getRequestByTeamId(Long id) {
-        return this.requestRepository.findAll().stream().filter(request -> request.getTeam().getId().equals(id)).collect(Collectors.toSet());
+    public Iterable<RequestDTO> getRequestByTeamId(Long id) {
+        return this.requestRepository.findAll().stream().filter(request -> request.getTeam().getId().equals(id))
+                .map(request -> modelMapper.map(request, RequestDTO.class))
+                .collect(Collectors.toSet());
     }
 
     public void acceptRequest(Request request) {
