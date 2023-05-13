@@ -65,6 +65,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
+    @ExceptionHandler(value = TeamNotExistsException.class)
+    protected ResponseEntity<Object> teamNotExists(RuntimeException ex, WebRequest request){
+        val body = ErrorResponse.builder().status(HttpStatus.NOT_FOUND.value())
+                .message("Equipo no existente").build();
+        return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
 
 
 

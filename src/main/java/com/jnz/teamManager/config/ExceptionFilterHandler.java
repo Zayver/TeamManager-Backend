@@ -1,9 +1,8 @@
 package com.jnz.teamManager.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jnz.teamManager.exception.dto.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,14 +36,14 @@ public class ExceptionFilterHandler extends OncePerRequestFilter {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             mapper.writeValue(response.getWriter(), err);
 
-        }catch (MalformedJwtException e){
+        } catch (JwtException e){
             var err = new HashMap<>();
-            err.put("status", HttpStatus.BAD_REQUEST.value());
-            err.put("message", "Malformed JWT token");
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            err.put("status", HttpStatus.UNAUTHORIZED.value());
+            err.put("message", "JWT no verificado");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             mapper.writeValue(response.getWriter(), err);
-
-        }catch (RuntimeException e){
+        }
+        catch (RuntimeException e){
             var err = new HashMap<>();
             err.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
             err.put("message", "Unknown server error ");

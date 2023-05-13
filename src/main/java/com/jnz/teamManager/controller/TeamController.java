@@ -1,6 +1,7 @@
 package com.jnz.teamManager.controller;
 
 import com.jnz.teamManager.dto.TeamDTO;
+import com.jnz.teamManager.dto.UserDTO;
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class TeamController {
     @DeleteMapping("/delete/{id}")
     public void deleteTeam(@PathVariable("id") Long id){
         teamService.deleteTeam(id);
+    }
+
+    @GetMapping("/users/{id}")
+    public Iterable<UserDTO> getUsersByTeamId(@PathVariable("id") Long id){
+        return teamService.getUsersByTeamId(id);
     }
 
 }

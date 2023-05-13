@@ -1,6 +1,7 @@
 package com.jnz.teamManager.service;
 
 import com.jnz.teamManager.dto.TeamDTO;
+import com.jnz.teamManager.dto.UserDTO;
 import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.exception.error.TeamNotExistsException;
 import com.jnz.teamManager.repository.TeamRepository;
@@ -63,4 +64,11 @@ public class TeamService {
                 .map(team -> modelMapper.map(team, TeamDTO.class))
                 .collect(Collectors.toSet());
     }
+
+    public Iterable<UserDTO> getUsersByTeamId(Long id) {
+        val team = getTeamById(id);
+        return team.getPlayers().stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toSet());
+    }
+
+
 }
