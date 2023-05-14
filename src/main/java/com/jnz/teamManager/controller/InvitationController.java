@@ -14,8 +14,8 @@ public class InvitationController {
 
     @Autowired
     InvitationsService invitationsService;
-    @GetMapping("/get/{id}")
-    public Iterable<InvitationDTO> getInvitation(@PathVariable("id") Long id){
+    @GetMapping("/get")
+    public Iterable<InvitationDTO> getInvitation(@RequestParam("id") Long id){
         return invitationsService.getInvitationsById(id);
     }
     @PostMapping("/add")

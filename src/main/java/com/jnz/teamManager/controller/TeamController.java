@@ -15,14 +15,13 @@ public class TeamController {
     TeamService teamService;
 
 
-    @GetMapping("/all/{id}")
-    public Iterable<TeamDTO> findAll(@PathVariable("id") Long id){
+    @GetMapping("/all")
+    public Iterable<TeamDTO> findAll(@RequestParam("id") Long id){
         return teamService.getTeamsWhereUserIsNotAt(id);
     }
 
-    @PostMapping("/add/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addTeam(@RequestBody Team team, @PathVariable("id") Long id){
+    @PostMapping("/add")
+    public void addTeam(@RequestBody Team team, @RequestParam("id") Long id){
         teamService.addTeam(team, id);
     }
 
@@ -31,13 +30,13 @@ public class TeamController {
         teamService.updateTeam(team);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteTeam(@PathVariable("id") Long id){
+    @DeleteMapping("/delete")
+    public void deleteTeam(@RequestParam("id") Long id){
         teamService.deleteTeam(id);
     }
 
-    @GetMapping("/users/{id}")
-    public Iterable<UserDTO> getUsersByTeamId(@PathVariable("id") Long id){
+    @GetMapping("/users")
+    public Iterable<UserDTO> getUsersByTeamId(@RequestParam("id") Long id){
         return teamService.getUsersByTeamId(id);
     }
 

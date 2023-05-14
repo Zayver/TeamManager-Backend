@@ -19,8 +19,8 @@ public class RequestController {
         requestService.addRequest(request);
     }
 
-    @GetMapping("/get/{id}")
-    public Iterable<RequestDTO> getRequestByTeamId(@PathVariable("id") Long id){
+    @GetMapping("/get")
+    public Iterable<RequestDTO> getRequestByTeamId(@RequestParam("id") Long id){
         return requestService.getRequestByTeamId(id);
     }
 
