@@ -24,14 +24,4 @@ public class UserController {
     public Iterable<TeamDTO> getTeamsByUserId(@RequestParam("id") Long id){
         return userService.getTeamsByUserId(id);
     }
-
-
-    @PutMapping("/add_team")
-    public void addTeamToUser(@RequestBody Map<String, String> json) {
-        val id = Long.parseLong(json.get("id"));
-        val teamId = Long.parseLong(json.get("teamId"));
-        userService.addTeamToUser(id, teamId);
-    }
-
-
 }

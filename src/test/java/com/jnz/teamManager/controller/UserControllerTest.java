@@ -1,8 +1,11 @@
 package com.jnz.teamManager.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jnz.teamManager.dto.TeamDTO;
 import com.jnz.teamManager.dto.UserDTO;
 import com.jnz.teamManager.entity.Role;
+import com.jnz.teamManager.entity.Team;
 import com.jnz.teamManager.service.UserService;
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -46,16 +49,34 @@ public class UserControllerTest {
 
         Mockito.when(userService.getAllUsersExceptCaller(1L)).thenReturn(users);
 
-        val res = mockMvc.perform(get("/user/all/1")).andExpect(status().isOk()).andReturn();
+        val res = mockMvc.perform(get("/user/all").param("id", "1")).andExpect(status().isOk()).andReturn();
         var responseUser =  objectMapper.readValue(res.getResponse().getContentAsString(), List.class);
 
         assertFalse(responseUser.contains(user));
     }
 
     @Test
-    void getUserTeams(){
-        val teams =
-        Mockito.when(userService.getTeamsByUserId(1L)).thenReturn()
+    void getAllUsersExceptCallerBadRequest() throws Exception {
+        mockMvc.perform(get("/user/all")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getTeamsByUserId() throws Exception {
+        val teams = List.of(
+                TeamDTO.builder().name("Team Test").build(),
+                TeamDTO.builder().name("Team tester").build()
+        );
+        Mockito.when(userService.getTeamsByUserId(1L)).thenReturn(teams);
+
+        val res = mockMvc.perform(get("/user/teams").param("id", "1")).andExpect(status().isOk()).andReturn();
+        List<TeamDTO> response = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<>() {});
+
+        assertIterableEquals(teams, response);
+    }
+
+    @Test
+    void getTeamsByUserIdBadRequest() throws Exception {
+        mockMvc.perform(get("/user/teams")).andExpect(status().isBadRequest());
     }
     
 }
