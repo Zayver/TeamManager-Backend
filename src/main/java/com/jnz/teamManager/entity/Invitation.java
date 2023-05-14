@@ -4,7 +4,10 @@ package com.jnz.teamManager.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -14,6 +17,9 @@ import lombok.Data;
         property = "id",
         scope = Invitation.class
 )
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

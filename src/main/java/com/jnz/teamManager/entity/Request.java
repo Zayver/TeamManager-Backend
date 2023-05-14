@@ -9,7 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -19,6 +22,9 @@ import lombok.Data;
         property = "id",
         scope = Request.class
 )
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

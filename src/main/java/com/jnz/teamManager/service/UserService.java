@@ -47,7 +47,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        val user = userRepository.findById(id).orElseThrow();
+        val user = userRepository.findById(id).orElseThrow(UserNotExistsException::new);
         userRepository.delete(user);
     }
 
