@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "_user")
 @EqualsAndHashCode(exclude = {"userTeams"})
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
