@@ -1,4 +1,4 @@
-package com.jnz.teamManager.config;
+package com.jnz.teamManager.config.filter;
 
 import com.jnz.teamManager.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -26,6 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
+    private final List<String> ignoreFilter = List.of("/auth/register", "/auth/login", "/auth/logout");
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -54,5 +57,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request){
+        return ignoreFilter.contains(request.getRequestURI());
     }
 }

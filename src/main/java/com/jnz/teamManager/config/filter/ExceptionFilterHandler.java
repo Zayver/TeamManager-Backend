@@ -1,4 +1,4 @@
-package com.jnz.teamManager.config;
+package com.jnz.teamManager.config.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
